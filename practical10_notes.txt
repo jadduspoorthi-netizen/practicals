@@ -1,0 +1,52 @@
+PRACTICAL 10: FILE SYSTEM AND FILE I/O
+
+Experiment 1: Investigating Inodes, Hard Links, and Symbolic Links
+
+Objective:
+To investigate inode numbers and understand the differences between hard links and symbolic links in Linux.
+
+Commands used:
+- ls -i and ls -li: Display inode numbers.
+- stat: Display file metadata.
+- ln: Create a hard link.
+- ln -s: Create a symbolic link.
+- readlink: Display a symbolic link's target.
+- rm: Remove a filename.
+
+Observations:
+1. A hard link and its original filename shared the same inode number (1311017).
+2. The link count increased from 1 to 2 after creating the hard link.
+3. Changes made through the hard link were visible through the original filename.
+4. After deleting original.txt, hardlink.txt remained accessible.
+5. The symbolic link had a different inode number from its target.
+6. stat displayed the symbolic link's metadata, while stat -L displayed the target's metadata.
+7. After deleting the target, the symbolic link became broken.
+
+Result:
+The experiment demonstrated how inodes identify files and how hard links differ from symbolic links.
+
+Experiment 2: File I/O Using mmap() and read()/write()
+
+Objective:
+To demonstrate modifying file contents using memory-mapped I/O and standard system calls.
+
+Programs:
+- mmap_file.c
+- read_write_file.c
+
+Functions used:
+- mmap(), msync(), munmap()
+- open(), read(), write(), lseek(), close()
+
+Procedure:
+1. Created data.txt containing a test sentence.
+2. Used mmap_file.c to map the file into memory and replace its first five bytes with HELLO.
+3. Restored the original test sentence.
+4. Used read_write_file.c to read the file into a buffer, modify its first five bytes, and write the buffer back.
+5. Used cat data.txt to verify the modified content.
+
+Observed output:
+HELLO memory mapped file I/O demonstration
+
+Result:
+Both programs successfully modified the file using their respective I/O techniques.
