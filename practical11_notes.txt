@@ -1,0 +1,58 @@
+OSSP — PRACTICAL SESSION 11
+
+Title: Multithreaded Counter and Race Condition Using POSIX Threads
+
+AIM
+
+To develop multithreaded C programs using POSIX threads and demonstrate a race condition and its prevention using mutex locks.
+
+EXPERIMENT 1: RACE CONDITION
+
+Program: race_counter.c
+
+Concepts:
+- pthread_create() creates worker threads.
+- pthread_join() waits for worker threads to finish.
+- All threads access the shared variable counter.
+- Without synchronization, concurrent updates can cause a data race.
+
+Compilation:
+gcc -Wall -Wextra -g race_counter.c -o race_counter -pthread
+
+Execution:
+./race_counter
+
+Observed output:
+Expected counter value: 4000000
+Actual counter value: 1175953
+
+Result:
+The actual count was lower than expected, demonstrating the effects that unsynchronized concurrent access can have. Results may vary between executions.
+
+EXPERIMENT 2: MUTEX SYNCHRONIZATION
+
+Program: mutex_counter.c
+
+Concepts:
+- A mutex provides mutual exclusion.
+- pthread_mutex_lock() acquires the lock.
+- pthread_mutex_unlock() releases the lock.
+- The shared counter is updated inside the protected critical section.
+
+Compilation:
+gcc -Wall -Wextra -O2 -pthread mutex_counter.c -o mutex_counter
+
+Execution:
+./mutex_counter
+
+Observed output:
+Expected counter value: 4000000
+Actual counter value: 4000000
+Execution time: 0.090741 seconds
+
+Result:
+The mutex-protected program produced the expected count of 4,000,000. The observed execution time was 0.090741 seconds on this run.
+
+CONCLUSION
+
+The experiments demonstrate that shared data must be synchronized when accessed concurrently by multiple threads. Mutex locks protect the critical section and prevent competing updates to the counter.
