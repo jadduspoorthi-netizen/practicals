@@ -1,0 +1,83 @@
+OSSP — PRACTICAL SESSION 12
+
+EXPERIMENT 1: PRODUCER–CONSUMER USING POSIX THREADS AND SEMAPHORES
+
+Aim:
+To implement the Producer–Consumer problem using POSIX threads, counting semaphores, and a mutex, and measure throughput.
+
+Program: pc_semaphore.c
+
+Synchronization:
+- empty: counts available buffer slots.
+- full: counts filled buffer slots.
+- mutex: protects shared buffer operations.
+- STOP_ITEM: allows consumers to terminate after producers finish.
+
+Compilation:
+gcc -Wall -Wextra -O2 pc_semaphore.c -o pc_semaphore -pthread
+
+Execution:
+./pc_semaphore
+
+Observed results (buffer size 10):
+Expected items: 1000000
+Produced items: 1000000
+Consumed items: 1000000
+Execution time: 5.851440 seconds
+Throughput: 170898.10 items/second
+Synchronization: CORRECT
+
+Repeated-run observation:
+A subsequent run also produced and consumed 1000000 items correctly. Execution time varies with system load and scheduling.
+
+Result:
+Counting semaphores and mutex synchronization allowed the producer and consumer threads to share the bounded buffer correctly.
+
+EXPERIMENT 2: DEADLOCK DEMONSTRATION
+
+Aim:
+To demonstrate deadlock using two threads competing for two mutex-protected resources.
+
+Program: deadlock_demo.c
+
+Compilation:
+gcc -Wall -Wextra deadlock_demo.c -o deadlock_demo -pthread
+
+Execution:
+timeout 5s ./deadlock_demo
+
+Observation:
+Thread 1 acquired Resource A and waited for Resource B. Thread 2 acquired Resource B and waited for Resource A. Neither thread could proceed, demonstrating deadlock. The timeout safely stopped the program.
+
+Four necessary conditions:
+1. Mutual exclusion
+2. Hold and wait
+3. No preemption
+4. Circular wait
+
+Result:
+The program demonstrated a possible deadlock caused by threads acquiring shared resources in opposite orders.
+
+EXPERIMENT 3: DEADLOCK PREVENTION USING RESOURCE ORDERING
+
+Aim:
+To prevent deadlock by making all threads acquire resources in a fixed global order.
+
+Program: deadlock_prevention.c
+
+Compilation:
+gcc -Wall -Wextra -O2 deadlock_prevention.c -o deadlock_prevention -pthread
+
+Execution:
+./deadlock_prevention
+
+Observation:
+Both threads acquired Resource A before Resource B, used the resources, and released them. The program printed:
+Program completed without deadlock.
+
+Result:
+Global resource ordering eliminates circular wait and prevents deadlock in this example.
+
+OVERALL CONCLUSION
+
+The experiments demonstrated bounded-buffer synchronization using counting semaphores and mutexes, and deadlock prevention through global resource ordering. The producer–consumer program processed all expected items, while the resource-ordering program completed without deadlock.
